@@ -2,3 +2,6 @@
 #~
 .rbx
 *.class
+*.swp
+.kitchen*
+.vagrant*

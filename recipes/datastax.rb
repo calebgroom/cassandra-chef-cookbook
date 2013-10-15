@@ -20,7 +20,7 @@
 # This recipe relies on a PPA package and is Ubuntu/Debian specific. Please
 # keep this in mind.
 
-include_recipe "java"
+package "openjdk-7-jdk"
 
 apt_repository "datastax" do
   uri          "http://debian.datastax.com/community"
@@ -30,14 +30,8 @@ apt_repository "datastax" do
   action :add
 end
 
-# DataStax Server Community Edition package will not install w/o this
-package "python-cql" do
-  action :install
-end
-
-package "dsc20" do
-  action :install
-end
+package "python-cql"
+package "cassandra"
 
 service "cassandra" do
   supports :restart => true, :status => true
@@ -48,6 +42,7 @@ end
 # file in place. A different cluster name will prevent cassandra from restarting.
 # Since this is the first run, wipe the data.
 path_to_prevent_file = File.join(node.cassandra.conf_dir, "prevent_data_deletion")
+puts path_to_prevent_file
 execute "clear-data-after-package-install" do
   command "rm -rf /var/lib/cassandra/*"
   notifies :create, "file[#{path_to_prevent_file}]", :immediately
