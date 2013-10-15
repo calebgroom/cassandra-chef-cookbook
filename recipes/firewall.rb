@@ -2,7 +2,7 @@ include_recipe 'firewall'
 
 ### Get the interface for the IP address Cassandra is set to listen on ###
 interface = node[:network][:interfaces].select {|i| 
-  i if node['network']['interfaces'][i[0]]['addresses'].has_key?("#{node['cassandra']['listen_address']}")}
+  i if node['network']['interfaces'][i]['addresses'].has_key?("#{node['cassandra']['listen_address']}")}
 node.set_unless[:cassandra][:listen_interface] = 
   (node[:cassandra][:listen_address] == "localhost" ? "lo" : interface.flatten[0])
 
